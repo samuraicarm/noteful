@@ -1,93 +1,104 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, } from 'react-router-dom';
 import Header from './components/Header';
 import Notes from './components/Notes';
 import AddNote from './components/AddNote';
 import SideBar from './components/SideBar';
 import CreateFolder from './components/CreateFolder';
-import { Link } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
+import NoteItem from './components/NoteItem';
 import './App.css';
 
+import Context from './Context';
 
 
 class App extends Component {
-  state = {
-    notes: [
-      {
-        id: uuidv4(),
-        title: 'React',
-        note: 'notes on React',
-        folder: '',
-        modified: "2020-08-10"
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      notes: [],
+      folders: [],
+      delNote: (id) => {
+        fetch(`http://localhost:9090/notes/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'content-type': 'application/json'
+          },
+        })
+        this.setState({ todos: [...this.state.notes.filter(note => note.id !== id)] })
       },
+      addNote: (id, title, note) => {
+        const newNote = {
+          id: id,
+          title: title,
+          note: note,
+        }
 
-      {
-        id: uuidv4(),
-        title: 'Javascript',
-        note: 'notes on javascript',
-        folder: '',
-        modified: "2020-08-8"
-      },
-
-      {
-        id: uuidv4(),
-        title: 'CSS',
-        note: 'notes on css',
-        folder: '',
-        modified: "2020-07-31"
-      },
-
-    ]
+        this.setState({ notes: [...this.state.notes, newNote] });
+      }
+    };
   }
 
-  //Delete Note
-  delNote = (id) => {
-    this.setState({ todos: [...this.state.notes.filter(note => note.id !== id)] })
+  componentDidMount() {
+    Promise.all([
+      fetch('http://localhost:9090/notes'),
+      fetch('http://localhost:9090/folders'),
+    ])
+      .then(([notesRes, foldersRes]) => {
+        if (!notesRes.ok)
+          return notesRes.json().then(e => Promise.reject(e));
+        if (!foldersRes.ok)
+          return foldersRes.json().then(e => Promise.reject(e));
+
+        return Promise.all([notesRes.json(), foldersRes.json()]);
+      })
+      .then(([notes, folders]) => {
+        this.setState({ notes, folders });
+      })
+      .catch(error => {
+        console.error({ error });
+      });
   }
 
-  //Add Note
-  addNote = (title, note) => {
-    const newNote = {
-      id: uuidv4(),
-      title: title,
-      note: note,
-    }
-
-    this.setState({ notes: [...this.state.notes, newNote] });
-  }
-  render() {
+  renderRoutes() {
     return (
       <Router>
-        <main className='App'>
-          <Switch>
-            <div className="container">
-              <Header />
-              <div className="row">
-                <div className="wrapper">
-                  <div className="box columnA">
-                    <SideBar />
-                  </div>
-                  <div className="box columnB">
-                    <Route exact path="/" render={props => (
-                      <React.Fragment>
-                        <Notes notes={this.state.notes} delNote={this.delNote} />
-                        <div className="noteCreate">
-                          <Link to="AddNote"> Create Note</Link>
-                        </div>
-                      </React.Fragment>
-                    )}
-                    />
-                    <Route path="/CreateFolder" component={CreateFolder} />
-                    <Route path="/AddNote" component={AddNote} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Switch>
-        </main>
+        <Route exact path="/" render={rprops => (
+          <Notes {...rprops} notes={this.state.notes} delNote={this.delNote} />
+        )}
+        />
+        <Route path="/folder/:folderid" render={rprops => (
+          <Notes {...rprops}
+            notes={this.state.notes.filter(note =>
+              note.folderId === rprops.match.params.folderid)}
+            delNote={this.delNote} />
+        )}
+        />
+        <Route path="/CreateFolder" component={CreateFolder} />
+        <Route path="/AddNote" component={AddNote} />
+        <Route path="/note/:noteid"
+          render={rprops =>
+            <NoteItem delNote={this.delNote}
+              note={this.state.notes.find(note => note.id === rprops.match.params.noteid) || { id: '', name: '', content: '', modified: '' }}
+              {...rprops} />}
+        />
       </Router >
+    )
+  }
+
+  render() {
+    return (
+      <Context.Provider value={this.state}>
+        <main className='App'>
+          <Header />
+          <div className="wrapper">
+            <div className="box columnA">
+              <SideBar />
+            </div>
+            <div className="box columnB"> {this.renderRoutes()}
+            </div>
+          </div>
+        </main>
+      </Context.Provider>
     );
   }
 }

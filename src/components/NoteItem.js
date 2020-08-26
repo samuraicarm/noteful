@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
 import './NoteItem.css';
 import PropTypes from 'prop-types';
+import Moment from 'react-moment';
+
+import { Link } from 'react-router-dom';
 
 
-
+import Context from '../Context';
 
 export class NoteItem extends Component {
+    static contextType = Context;
     render() {
-        const { id, title, modified } = this.props.note;
+        const { id, name, modified } = this.context.note;
         return (
-            <div >
-                <div className="note">
-                    <h3>
-                        {title}
-                    </h3>
-                    <p>
+            <div className="note">
+                <h3>
+                    <Link to={`/note/${id}`}>{name}</Link>
+                </h3>
+                <p>
+                    <Moment format="MM/DD/YYYY">
                         {modified}
-                    </p>
-                    <button className="delete" onClick={this.props.delNote.bind(this, id)}>Delete Note</button>
-                </div>
-
-
-
-
-
-            </div >
+                    </Moment>
+                </p>
+                <button className="delete" onClick={this.context.delNote.bind(this, id)}>Delete Note</button>
+            </div>
         )
     }
 }

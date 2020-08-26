@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
-import AddNote from './AddNote';
 import NoteItem from './NoteItem';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+
 import { Link } from 'react-router-dom';
 
+import Context from '../Context';
+
 class Notes extends Component {
+    static contextType = Context;
     render() {
-        return this.props.notes.map((note, modified) => (
-            <React.Fragment>
-                <NoteItem
-                    key={note.id}
+        return (
+            <>
+                {this.context.notes.map(note => <NoteItem
                     note={note}
-                    modified={modified}
-                    delNote={this.props.delNote} />
-            </React.Fragment>
-        ));
+                    delNote={this.context.delNote} />)}
+
+
+                < div className="noteCreate" >
+                    <Link to="AddNote"> Create Note</Link>
+                </div >
+            </>
+        )
 
     }
 
