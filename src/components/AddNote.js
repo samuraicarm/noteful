@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
-import Folders from './Folders';
+import Context from '../Context';
 
 export class AddNote extends Component {
 
+    static contextType = Context;
+
     state = {
-        title: '',
-        note: '',
-        folder: ''
+        name: '',
+        content: '',
+        folderId: '',
+        modified: new Date()
     }
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.addNote(this.state.title);
-        this.props.addNote(this.state.note);
-        this.setState({ title: '', note: '' });
+        this.context.addNote(this.state);
+        this.setState({ name: '', content: '', folderId: '' });
+        this.props.history.push('/')
     }
 
     onAdd = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -27,22 +30,23 @@ export class AddNote extends Component {
                     <legend>Create a note</legend>
                     <input
                         type="text"
-                        name="title"
-                        placeholder="Add Title"
-                        value={this.state.title}
+                        name="name"
+                        placeholder="Note Name"
+                        aria-label="Note Name"
+                        value={this.state.name}
                         onChange={this.onAdd}
                     />
                     <input
                         type="text"
-                        name="note"
-                        placeholder="Add Note"
-                        value={this.state.note}
+                        name="content"
+                        placeholder="Note Content"
+                        aria-label="Note Content"
+                        value={this.state.content}
                         onChange={this.onAdd}
                     />
-                    <select id="folders">
-                        <option>{Folders.folders[0].name}</option>
-                        <option>{Folders.folders[1].name}</option>
-                        <option>{Folders.folders[2].name}</option>
+                    <select id="folders" name="folderId" value={this.state.folderId} onChange={this.onAdd}>
+                        <option value="">Select Folder...</option>
+                        {this.context.folders.map(folder => <option key={folder.id} value={folder.id}>{folder.name}</option>)}
                     </select>
 
                     <input type="submit"

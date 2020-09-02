@@ -23,17 +23,20 @@ class App extends Component {
           headers: {
             'content-type': 'application/json'
           },
-        })
-        this.setState({ todos: [...this.state.notes.filter(note => note.id !== id)] })
+        }).then(() => {
+          this.setState({ notes: this.state.notes.filter(note => note.id !== id) })
+        });
       },
-      addNote: (id, title, note) => {
-        const newNote = {
-          id: id,
-          title: title,
-          note: note,
-        }
-
-        this.setState({ notes: [...this.state.notes, newNote] });
+      addNote: (newNote) => {
+        fetch(`http://localhost:9090/notes/`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(newNote)
+        }).then(res => res.json()).then((returnedNote) => {
+          this.setState({ notes: [...this.state.notes, returnedNote] });
+        });
       }
     };
   }
@@ -59,32 +62,6 @@ class App extends Component {
       });
   }
 
-  renderRoutes() {
-    return (
-      <Router>
-        <Route exact path="/" render={rprops => (
-          <Notes {...rprops} notes={this.state.notes} delNote={this.delNote} />
-        )}
-        />
-        <Route path="/folder/:folderid" render={rprops => (
-          <Notes {...rprops}
-            notes={this.state.notes.filter(note =>
-              note.folderId === rprops.match.params.folderid)}
-            delNote={this.delNote} />
-        )}
-        />
-        <Route path="/CreateFolder" component={CreateFolder} />
-        <Route path="/AddNote" component={AddNote} />
-        <Route path="/note/:noteid"
-          render={rprops =>
-            <NoteItem delNote={this.delNote}
-              note={this.state.notes.find(note => note.id === rprops.match.params.noteid) || { id: '', name: '', content: '', modified: '' }}
-              {...rprops} />}
-        />
-      </Router >
-    )
-  }
-
   render() {
     return (
       <Context.Provider value={this.state}>
@@ -94,7 +71,11 @@ class App extends Component {
             <div className="box columnA">
               <SideBar />
             </div>
-            <div className="box columnB"> {this.renderRoutes()}
+            <div className="box columnB">
+              <Route exact path={["/", "/folders/:folderid"]} component={Notes} />
+              <Route path="/CreateFolder" component={CreateFolder} />
+              <Route path="/AddNote" component={AddNote} />
+              <Route path="/notes/:noteid" component={NoteItem} />
             </div>
           </div>
         </main>

@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
-import Folders from './Folders';
+import Context from '../Context';
 
 import './FolderItem.css';
 
 import { Link } from 'react-router-dom'
 
 export class FolderItem extends Component {
+    static contextType = Context;
     render() {
         return (
             <div >
-                {Folders.folders.map(folder => (
-                    <div className="folder">
-                        <p><Link to={`/folder/${folder.id}`}>{folder.name}</Link></p>
+                {this.context.folders.map(folder => (
+                    <div key={folder.id} className="folder">
+                        <p><Link to={`/folders/${folder.id}`}>{folder.name}</Link></p>
                     </div>
                 ))}
 

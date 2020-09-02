@@ -9,11 +9,12 @@ import Context from '../Context';
 class Notes extends Component {
     static contextType = Context;
     render() {
+        const notes = this.props.match.params.folderid ? this.context.notes.filter(note =>
+            note.folderId === this.props.match.params.folderid) : this.context.notes;
         return (
             <>
-                {this.context.notes.map(note => <NoteItem
-                    note={note}
-                    delNote={this.context.delNote} />)}
+                {notes.map(note => <NoteItem key={note.id}
+                    match={{ params: { noteid: note.id } }} history={this.props.history} />)}
 
 
                 < div className="noteCreate" >
@@ -25,12 +26,4 @@ class Notes extends Component {
     }
 
 }
-
-
-
-//PropTypes
-Notes.propTypes = {
-    notes: PropTypes.array.isRequired
-}
-
 export default Notes;
