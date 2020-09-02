@@ -6,6 +6,7 @@ import AddNote from './components/AddNote';
 import SideBar from './components/SideBar';
 import CreateFolder from './components/CreateFolder';
 import NoteItem from './components/NoteItem';
+import FolderItem from './components/FolderItem';
 import './App.css';
 
 import Context from './Context';
@@ -37,7 +38,18 @@ class App extends Component {
         }).then(res => res.json()).then((returnedNote) => {
           this.setState({ notes: [...this.state.notes, returnedNote] });
         });
-      }
+      },
+      addFolder: (newFolder) => {
+        fetch(`http://localhost:9090/folders`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(newFolder)
+        }).then(res => res.json()).then((returnedFolder) => {
+          this.setState({ folder: [...this.state.folders, returnedFolder] });
+        });
+      },
     };
   }
 
@@ -76,6 +88,7 @@ class App extends Component {
               <Route path="/CreateFolder" component={CreateFolder} />
               <Route path="/AddNote" component={AddNote} />
               <Route path="/notes/:noteid" component={NoteItem} />
+
             </div>
           </div>
         </main>
