@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Context from '../Context';
 
 export class NoteItem extends Component {
+
     static contextType = Context;
     render() {
         return (
@@ -17,7 +18,7 @@ export class NoteItem extends Component {
                 {this.context.notes.map(note => (
                     <div key={note.id} className="note">
                         <h3><Link to={`/notes/${note.id}`}>{note.name}</Link></h3>
-                        <p>{note.modified}</p>
+                        <Moment format="MM/DD/YYYY">{note.modified}</Moment>
 
 
                         <button className="delete" onClick={() => {
