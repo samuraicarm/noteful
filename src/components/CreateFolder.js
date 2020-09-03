@@ -26,7 +26,8 @@ export class CreateFolder extends Component {
                     <input
                         type="text"
                         name="name"
-                        placeholder="Add Name"
+                        placeholder="Add Folder Name"
+                        aria-label="Folder Name"
                         value={this.state.name}
                         onChange={this.onAdd}
                     />

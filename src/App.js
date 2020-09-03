@@ -6,7 +6,6 @@ import AddNote from './components/AddNote';
 import SideBar from './components/SideBar';
 import CreateFolder from './components/CreateFolder';
 import NoteItem from './components/NoteItem';
-import FolderItem from './components/FolderItem';
 import './App.css';
 
 import Context from './Context';

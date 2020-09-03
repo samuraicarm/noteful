@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import NoteItem from './NoteItem';
-import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
@@ -15,6 +14,7 @@ class Notes extends Component {
             <>
                 {notes.map(note => <NoteItem key={note.id}
                     match={{ params: { noteid: note.id } }} history={this.props.history} />)}
+
 
 
                 < div className="noteCreate" >

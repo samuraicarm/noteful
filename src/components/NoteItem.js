@@ -11,23 +11,23 @@ import Context from '../Context';
 export class NoteItem extends Component {
     static contextType = Context;
     render() {
-        const note = this.context.notes.find(note => note.id === Number(this.props.match.params.noteid))
-        const { id, name, modified } = note || {};
         return (
-            <div className="note">
-                <h3>
-                    <Link to={`/notes/${id}`}>{name}</Link>
-                </h3>
-                <p>
-                    <Moment format="MM/DD/YYYY">
-                        {modified}
-                    </Moment>
-                </p>
-                <button className="delete" onClick={() => {
-                    this.context.delNote(id);
-                    this.props.history.push('/');
-                }}>Delete Note</button>
+
+            <div>
+                {this.context.notes.map(note => (
+                    <div key={note.id} className="note">
+                        <h3><Link to={`/notes/${note.id}`}>{note.name}</Link></h3>
+                        <p>{note.modified}</p>
+
+
+                        <button className="delete" onClick={() => {
+                            this.context.delNote(note.id);
+                            this.props.history.push('/');
+                        }}>Delete Note</button>
+                    </div>
+                ))}
             </div>
+
         )
     }
 }
