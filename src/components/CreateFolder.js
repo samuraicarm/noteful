@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Context from '../Context';
+import ValidationError from './ValidationError';
 
 export class CreateFolder extends Component {
 
@@ -18,7 +19,18 @@ export class CreateFolder extends Component {
 
     onAdd = (e) => this.setState({ [e.target.name]: e.target.value });
 
+    validateFolderName() {
+        const folderName = this.state.name;
+        if (folderName.length === 0) {
+            return 'folder name is required';
+        }
+    }
+
+
+
     render() {
+        const folderNameError = this.validateFolderName();
+
         return (
             <form onSubmit={this.onSubmit} >
                 <fieldset>
@@ -31,11 +43,17 @@ export class CreateFolder extends Component {
                         value={this.state.name}
                         onChange={this.onAdd}
                     />
+                    <div>
+                        {this.state.name && (<ValidationError message={folderNameError} />)}
+                    </div>
 
                     <input type="submit"
                         value="Submit"
                         className="btn"
                         style={{ flex: "1" }}
+                        disabled={
+                            this.validateFolderName()
+                        }
                     />
                 </fieldset>
             </form>

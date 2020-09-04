@@ -10,6 +10,7 @@ class Notes extends Component {
     render() {
         const notes = this.props.match.params.folderid ? this.context.notes.filter(note =>
             note.folderId === this.props.match.params.folderid) : this.context.notes;
+
         return (
             <>
                 {notes.map(note => <NoteItem key={note.id}

@@ -5,7 +5,9 @@ import Notes from './components/Notes';
 import AddNote from './components/AddNote';
 import SideBar from './components/SideBar';
 import CreateFolder from './components/CreateFolder';
-import NoteItem from './components/NoteItem';
+import ErrorBoundary from './components/errorBoundary';
+import NoteDetail from './components/NoteDetail';
+
 import './App.css';
 
 import Context from './Context';
@@ -76,21 +78,26 @@ class App extends Component {
   render() {
     return (
       <Context.Provider value={this.state}>
+
         <main className='App'>
           <Header />
           <div className="wrapper">
-            <div className="box columnA">
-              <SideBar />
-            </div>
-            <div className="box columnB">
-              <Route exact path={["/", "/folders/:folderid"]} component={Notes} />
-              <Route path="/CreateFolder" component={CreateFolder} />
-              <Route path="/AddNote" component={AddNote} />
-              <Route path="/notes/:noteid" component={NoteItem} />
-
-            </div>
+            <ErrorBoundary>
+              <div className="box columnA">
+                <SideBar />
+              </div>
+            </ErrorBoundary>
+            <ErrorBoundary>
+              <div className="box columnB">
+                <Route exact path={["/", "/folders/:folderid", "/notes/:noteid"]} component={Notes} />
+                <Route path="/CreateFolder" component={CreateFolder} />
+                <Route path="/AddNote" component={AddNote} />
+                <Route path="/notes/:noteid" component={NoteDetail} />
+              </div>
+            </ErrorBoundary>
           </div>
         </main>
+
       </Context.Provider>
     );
   }

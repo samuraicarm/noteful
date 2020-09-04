@@ -9,9 +9,9 @@ import { Link } from 'react-router-dom';
 import Context from '../Context';
 
 export class NoteItem extends Component {
-
     static contextType = Context;
     render() {
+
         return (
 
             <div>
