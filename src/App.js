@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import Notes from './components/Notes';
 import AddNote from './components/AddNote';
@@ -76,31 +76,35 @@ class App extends Component {
   }
 
   render() {
+
     return (
-      <Context.Provider value={this.state}>
-
-        <main className='App'>
-          <Header />
-          <div className="wrapper">
-            <ErrorBoundary>
-              <div className="box columnA">
-                <SideBar />
-              </div>
-            </ErrorBoundary>
-            <ErrorBoundary>
-              <div className="box columnB">
-                <Route exact path={["/", "/folders/:folderid", "/notes/:noteid"]} component={Notes} />
-                <Route path="/CreateFolder" component={CreateFolder} />
-                <Route path="/AddNote" component={AddNote} />
-                <Route path="/notes/:noteid" component={NoteDetail} />
-              </div>
-            </ErrorBoundary>
-          </div>
-        </main>
-
-      </Context.Provider>
+      <Router >
+        <Context.Provider value={this.state}>
+          <main className='App'>
+            <Header />
+            <div className="wrapper">
+              <ErrorBoundary>
+                <div className="box columnA">
+                  <SideBar />
+                </div>
+              </ErrorBoundary>
+              <ErrorBoundary>
+                <div className="box columnB">
+                  <Switch>
+                    <Route exact path={["/", "/folders/:folderid", "/notes/:noteid"]} component={Notes} />
+                    <Route path="/CreateFolder" component={CreateFolder} />
+                    <Route path="/AddNote" component={AddNote} />
+                  </Switch>
+                </div>
+              </ErrorBoundary>
+            </div>
+          </main>
+        </Context.Provider>
+      </Router>
     );
+
   }
+
 }
 
 export default App;
