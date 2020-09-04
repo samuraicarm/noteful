@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Notes from './components/Notes';
 import AddNote from './components/AddNote';
@@ -90,11 +90,9 @@ class App extends Component {
               </ErrorBoundary>
               <ErrorBoundary>
                 <div className="box columnB">
-                  <Switch>
-                    <Route exact path={["/", "/folders/:folderid", "/notes/:noteid"]} component={Notes} />
-                    <Route path="/CreateFolder" component={CreateFolder} />
-                    <Route path="/AddNote" component={AddNote} />
-                  </Switch>
+                  <Route exact path={["/", "/folders/:folderid", "/notes/:noteid"]} component={Notes} />
+                  <Route path="/CreateFolder" component={CreateFolder} />
+                  <Route path="/AddNote" component={AddNote} />
                 </div>
               </ErrorBoundary>
             </div>
