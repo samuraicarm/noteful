@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Header from './components/Header';
 import Notes from './components/Notes';
 import AddNote from './components/AddNote';
 import SideBar from './components/SideBar';
 import CreateFolder from './components/CreateFolder';
 import ErrorBoundary from './components/errorBoundary';
-import NoteDetail from './components/NoteDetail';
+import NoteItem from './components/NoteItem';
 
 import './App.css';
 
@@ -78,27 +78,26 @@ class App extends Component {
   render() {
 
     return (
-      <Router >
+      <ErrorBoundary>
         <Context.Provider value={this.state}>
           <main className='App'>
             <Header />
             <div className="wrapper">
-              <ErrorBoundary>
-                <div className="box columnA">
-                  <SideBar />
-                </div>
-              </ErrorBoundary>
-              <ErrorBoundary>
-                <div className="box columnB">
-                  <Route exact path={["/", "/folders/:folderid", "/notes/:noteid"]} component={Notes} />
-                  <Route path="/CreateFolder" component={CreateFolder} />
-                  <Route path="/AddNote" component={AddNote} />
-                </div>
-              </ErrorBoundary>
+
+              <div className="box columnA">
+                <SideBar />
+              </div>
+              <div className="box columnB">
+                <Route exact path={["/", "/folders/:folderid"]} component={Notes} />
+                <Route path="/notes/:noteid" component={NoteItem} />
+                <Route path="/CreateFolder" component={CreateFolder} />
+                <Route path="/AddNote" component={AddNote} />
+              </div>
+
             </div>
           </main>
         </Context.Provider>
-      </Router>
+      </ErrorBoundary>
     );
 
   }

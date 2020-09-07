@@ -1,10 +1,9 @@
-.wrapper {
-  display: grid;
-  grid-template-columns: 33.334% 66.667%;
+* {
+  box-sizing: border-box;
 }
 
 .box {
-  padding: 1em;
+  padding: 16px;
 }
 
 body {
@@ -29,9 +28,16 @@ a {
   text-decoration: none;
 }
 
-.column {
-  float: left;
-  width: 45%;
+.wrapper {
+  display: flex;
+}
+
+.columnA {
+  flex: 1;
+}
+
+.columnB {
+  flex: 4;
 }
 
 .noteCreate {

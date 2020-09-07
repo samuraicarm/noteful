@@ -1,14 +1,14 @@
 .note {
     width: 100%;
     border: 1px solid black;
-    padding: 5px;
+    padding: 20px;
     margin-bottom: 5px;
-    height: 130px
+    position: relative;
 }
 
 .delete {
-    float: right;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
+    padding: 5px 15px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }

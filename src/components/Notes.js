@@ -8,8 +8,9 @@ import Context from '../Context';
 class Notes extends Component {
     static contextType = Context;
     render() {
-        const notes = this.props.match.params.folderid ? this.context.notes.filter(note =>
-            note.folderId === this.props.match.params.folderid) : this.context.notes;
+        const { folderid } = this.props.match.params;
+        const notes = folderid ? this.context.notes.filter(note =>
+            note.folderId === folderid) : this.context.notes;
 
         return (
             <>
