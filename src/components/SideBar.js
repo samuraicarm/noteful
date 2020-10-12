@@ -13,7 +13,7 @@ class SideBar extends Component {
 
                 <FolderItem />
 
-                <Link to="CreateFolder"> Create Folder</Link>
+                <Link to="/CreateFolder"> Create Folder</Link>
 
             </div>
 
