@@ -94,7 +94,7 @@ class App extends Component {
               <div className="box columnB">
                 <Route
                   exact
-                  path={["/", "/folders/:folderid"]}
+                  path={["/", "/folder/:folderid"]}
                   component={Notes}
                 />
                 <Route path="/notes/:noteid" component={NoteItem} />
