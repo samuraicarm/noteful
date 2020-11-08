@@ -8,7 +8,7 @@ import CreateFolder from "./components/CreateFolder";
 import ErrorBoundary from "./components/errorBoundary";
 import NoteItem from "./components/NoteItem";
 
-import { API_ENDPOINT } from "./feconfig";
+import { API_ENDPOINT, API_KEY } from "./feconfig";
 
 import "./App.css";
 
@@ -21,10 +21,11 @@ class App extends Component {
       notes: [],
       folders: [],
       delNote: (id) => {
-        fetch(`${API_ENDPOINT}/notes/${id}`, {
+        fetch(`${API_ENDPOINT}/${id}`, {
           method: "DELETE",
           headers: {
             "content-type": "application/json",
+            Authorization: `Bearer ${API_KEY}`,
           },
         }).then(() => {
           this.setState({
@@ -33,10 +34,11 @@ class App extends Component {
         });
       },
       addNote: (newNote) => {
-        fetch(`${API_ENDPOINT}/notes/`, {
+        fetch(`${API_ENDPOINT}/`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
+            Authorization: `Bearer ${API_KEY}`,
           },
           body: JSON.stringify(newNote),
         })
@@ -50,12 +52,13 @@ class App extends Component {
           method: "POST",
           headers: {
             "content-type": "application/json",
+            Authorization: `Bearer ${API_KEY}`,
           },
           body: JSON.stringify(newFolder),
         })
           .then((res) => res.json())
           .then((returnedFolder) => {
-            this.setState({ folder: [...this.state.folders, returnedFolder] });
+            this.setState({ folders: [...this.state.folders, returnedFolder] });
           });
       },
     };
@@ -63,8 +66,16 @@ class App extends Component {
 
   componentDidMount() {
     Promise.all([
-      fetch(`${API_ENDPOINT}/notes`),
-      fetch(`${API_ENDPOINT}/folders`),
+      fetch(`${API_ENDPOINT}/`, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+        },
+      }),
+      fetch(`${API_ENDPOINT}/folders`, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+        },
+      }),
     ])
       .then(([notesRes, foldersRes]) => {
         if (!notesRes.ok) return notesRes.json().then((e) => Promise.reject(e));
@@ -94,7 +105,7 @@ class App extends Component {
               <div className="box columnB">
                 <Route
                   exact
-                  path={["/", "/folder/:folderid"]}
+                  path={["/", "/folders/:folderid"]}
                   component={Notes}
                 />
                 <Route path="/notes/:noteid" component={NoteItem} />
