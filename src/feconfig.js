@@ -1,5 +1,5 @@
 module.exports = {
   //API_ENDPOINT: "http://localhost:8000",
   API_ENDPOINT: "https://carmen-noteful.herokuapp.com/api/noteful",
-  API_KEY: process.env.REACT_APP_API_KEY,
+  API_KEY: process.env.REACT_APP_API_KEY || "87iuashdf78a87shdhfuas78hd",
 };
